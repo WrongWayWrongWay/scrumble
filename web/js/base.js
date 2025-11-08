@@ -1,0 +1,1205 @@
+
+
+    // --- TILE STORAGE SYSTEM ---
+    // Using a Map for efficient key/value access (supports infinite world)
+    let tileMap = new Map();
+
+    let proposedTileMap = new Map();
+
+    const users = new Map();
+
+    function generateAuthorName() {
+      const titles = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."];
+      const adjectives = [
+        "Eloquent", "Mysterious", "Somber", "Brilliant", "Enigmatic", "Gentle",
+        "Brooding", "Inspired", "Melancholic", "Witty", "Stoic", "Dreamy",
+        "Vivid", "Arcane", "Noble", "Poetic", "Clever", "Ambitious", "Haunted",
+        "Fabled", "Quiet", "Venerable", "Charming", "Daring", "Curious"
+      ];
+      const firstNames = [
+        "Tobias", "Ada", "Lillian", "Oscar", "Julian", "Clara", "Eleanor", "Hugo",
+        "Daphne", "Nathaniel", "Rowan", "Sylvia", "Edgar", "Vera", "August",
+        "Florence", "Lucian", "Ivy", "Gideon", "Mabel", "Arthur", "Beatrice",
+        "Felix", "Cecilia", "Miles"
+      ];
+      const lastNames = [
+        "Quill", "Penwright", "Inkwell", "Thorne", "Austen", "Brontë", "Heming",
+        "Wordsworth", "Hawthorne", "Byron", "Poe", "Shelley", "Twain", "Chaucer",
+        "Dickens", "Wilde", "Frost", "Lowell", "Whitman", "Melville", "Keats",
+        "Tennyson", "Carroll", "Eliot", "Huxley", "Orwell"
+      ];
+
+      const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+
+      return `${rand(titles)} ${rand(adjectives)} ${rand(firstNames)} ${rand(lastNames)}`;
+    }
+
+    let testName = localStorage.getItem("myName");
+
+    let myName = testName || generateAuthorName(); // Math.random();
+
+    let mode = 'development';// 'production'; // production  // development
+
+    // mode = prompt("Which mode?", mode);
+
+    let socket;
+
+    let lettersCollection = [];
+
+    let wordLetterValues = [
+      {
+        "letter": "A",
+        "quantity": 9,
+        "points": 1
+      },
+      {
+        "letter": "B",
+        "quantity": 2,
+        "points": 3
+      },
+      {
+        "letter": "C",
+        "quantity": 2,
+        "points": 3
+      },
+      {
+        "letter": "D",
+        "quantity": 4,
+        "points": 2
+      },
+      {
+        "letter": "E",
+        "quantity": 12,
+        "points": 1
+      },
+      {
+        "letter": "F",
+        "quantity": 2,
+        "points": 4
+      },
+      {
+        "letter": "G",
+        "quantity": 3,
+        "points": 2
+      },
+      {
+        "letter": "H",
+        "quantity": 2,
+        "points": 4
+      },
+      {
+        "letter": "I",
+        "quantity": 9,
+        "points": 1
+      },
+      {
+        "letter": "J",
+        "quantity": 1,
+        "points": 8
+      },
+      {
+        "letter": "K",
+        "quantity": 1,
+        "points": 5
+      },
+      {
+        "letter": "L",
+        "quantity": 4,
+        "points": 1
+      },
+      {
+        "letter": "M",
+        "quantity": 2,
+        "points": 3
+      },
+      {
+        "letter": "N",
+        "quantity": 6,
+        "points": 1
+      },
+      {
+        "letter": "O",
+        "quantity": 8,
+        "points": 1
+      },
+      {
+        "letter": "P",
+        "quantity": 2,
+        "points": 3
+      },
+      {
+        "letter": "Q",
+        "quantity": 1,
+        "points": 10
+      },
+      {
+        "letter": "R",
+        "quantity": 6,
+        "points": 1
+      },
+      {
+        "letter": "S",
+        "quantity": 4,
+        "points": 1
+      },
+      {
+        "letter": "T",
+        "quantity": 6,
+        "points": 1
+      },
+      {
+        "letter": "U",
+        "quantity": 4,
+        "points": 1
+      },
+      {
+        "letter": "V",
+        "quantity": 2,
+        "points": 4
+      },
+      {
+        "letter": "W",
+        "quantity": 2,
+        "points": 4
+      },
+      {
+        "letter": "X",
+        "quantity": 1,
+        "points": 8
+      },
+      {
+        "letter": "Y",
+        "quantity": 2,
+        "points": 4
+      },
+      {
+        "letter": "Z",
+        "quantity": 1,
+        "points": 10
+      },
+      // {
+      //   "letter": "_",
+      //   "quantity": 2,
+      //   "points": 0
+      // }
+    ];
+
+    function shuffleInPlace(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createLetterCollection() {
+      for (let i = 0; i < wordLetterValues.length; i++) {
+        let current = wordLetterValues[i];
+        for (let j = 0; j < current.quantity; j++) {
+          lettersCollection.push(current?.letter || "_");
+        }
+      }
+      shuffleInPlace(lettersCollection);
+      console.log(lettersCollection.length);
+    }
+
+    function getLetterFromCollection() {
+      if (lettersCollection.length <= 0) {
+        createLetterCollection();
+      }
+      return lettersCollection.shift();
+    }
+
+    createLetterCollection();
+
+    function populatePlayerLetters() {
+      for (let i = 1; i <= 7; i++) {
+        document.getElementById(`tile${i}`).innerText = getLetterFromCollection();
+      }
+      document.getElementById(`tile${8}`).innerText = "_";
+    }
+
+    populatePlayerLetters();
+
+    function getParameterByName(name, url = window.location.href) {
+      name = name.replace(/[\\[\\]]/g, '\\$&');
+      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+      const results = regex.exec(url);
+
+      if (!results) return null;
+      if (!results[2]) return '';
+
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    let test = getParameterByName("room");
+
+    if (test) {
+
+    } else {
+      test = "room1";
+    }
+
+    let myRoom = `${test}`;
+
+    localStorage.setItem("myName", myName);
+    localStorage.setItem("myRoom", myRoom);
+
+
+    switch (mode) {
+      case "production":
+        try {
+          socket = io("https://pasciak.com:4433", {
+            transports: ["websocket"], // optional: force WebSocket only
+          });
+          console.log("production - https://pasciak.com:4433");
+        } catch (e) {
+          socket = io("http://127.0.0.1:4433/", {
+            transports: ["websocket"], // optional: force WebSocket only
+          });
+          console.log("production - errored, using http://127.0.0.1:4433/");
+        }
+
+        break;
+      default:
+        socket = io("http://127.0.0.1:4433/", {
+          transports: ["websocket"], // optional: force WebSocket only
+        });
+        console.log("default - errored, using http://127.0.0.1:4433/");
+        break;
+
+    }
+
+    const log = (text) => {
+      document.getElementById("log").textContent += text + "\n";
+    };
+
+    socket.on("connect", () => {
+      log("✅ Connected to server");
+
+      setTimeout(() => {
+        joinRoom(myRoom, myName);
+        setTimeout(() => {
+          getMap();
+          playerStand();
+        }, 500)
+      }, 500)
+
+      document.getElementById("gamescreen").style.display = 'block';
+      document.getElementById("connectscreen").style.display = 'none';
+    });
+
+    socket.on("tileMap", (data) => {
+      console.log("tileMap", data);
+      console.log(typeof data);
+      //tileMap = data;
+
+    });
+
+    socket.on("data", (data) => {
+      console.log(data);
+
+      updatePlayers(data);
+
+      log("received data: " + data);
+    });
+
+
+    socket.on("reply", (msg) => {
+      log("Server: " + msg);
+    });
+
+
+    socket.on("broadcast", (msg) => {
+      log("Broadcasted: " + msg);
+    });
+
+    socket.on("disconnect", () => {
+      log("❌ Disconnected");
+    });
+
+    socket.on("roomsList", (data) => {
+      log(JSON.stringify(data));
+    })
+
+    socket.on("roomUsers", (data) => {
+      log(JSON.stringify(data));
+    })
+
+    socket.on('message', (msg) => {
+      console.log(msg)
+      log(msg);
+    });
+
+    socket.on('tileObjects', (jsonDataString) => {
+      console.log(jsonDataString)
+      try {
+        let o = JSON.parse(jsonDataString);
+        tileMap = new Map();
+        let o2 = Object.keys(o);
+
+        o2.forEach((k) => {
+          console.log(o[k]);
+          setTile(o[k].col, o[k].row, o[k]);
+        });
+
+
+
+        // console.log(o2);
+        // console.log(o);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    function updatePlayers(data) {
+      console.log('-----------------------------');
+      console.log('update players');
+      console.log('-----------------------------');
+      console.log(data.data);
+
+      let users2 = data.users;
+      console.log("USERS", users2);
+
+      users.set(data.data.myName, { dateTime: data?.data?.dateTime || data?.dateTime || Date.now(), nickname: data?.data?.myName, room: data.data.myRoom, playerCol: data.data.playerCol, playerRow: data.data.playerRow });
+
+      console.log(users);
+
+      log(data);
+    }
+
+    function getMap(data) {
+      data = { now: Date.now(), room: myRoom }
+      socket.emit('getMap', data);
+
+      setTimeout(() => {
+        // document.getElementById("#scrabbleRack").style.display = 'flex';
+        // document.getElementById("#scrabbleRackb").style.display = 'flex';
+
+      }, 1000);
+    }
+
+    function updatePlayerPosition(data) {
+      console.log("send UpdatePlayerPosition", data);
+      data.command = "updatePlayer";
+      sendMessage(data);
+    }
+
+    function sendMessage(data) {
+      console.log("sendMessage", data);
+
+      socket.emit("getRooms", { test: 'getRooms Called', data: data });
+
+      log("You: " + msg);
+    }
+
+    function joinRoom(roomName, nickname) {
+
+      const mapData = new Map([
+        ["-25,-25", { col: -25, row: -25, letter: "_" }],
+        ["-25,-24", { col: -25, row: -24, letter: "_" }],
+        ["-25,-23", { col: -25, row: -23, letter: "_" }]
+      ]);
+
+      const obj = Object.fromEntries(mapData); // Map → Object
+
+      const json = JSON.stringify(obj); // Object → JSON string
+
+      // socket.emit("joinRoom", { roomName, nickname, tileMap: json });
+
+      socket.emit("joinRoom", { roomName, nickname });
+
+    }
+
+    let playerX, playerY;
+
+    let playerCol = 0;
+    let playerRow = 0;
+
+    let proposedLetterUse = {};
+
+    // Arrow buttons move camera
+    // document.getElementById("up").addEventListener("click", () => cameraY += TILE);
+    // document.getElementById("down").addEventListener("click", () => cameraY -= TILE);
+    // document.getElementById("left").addEventListener("click", () => cameraX += TILE);
+    // document.getElementById("right").addEventListener("click", () => cameraX -= TILE);
+
+    function keepPlayerVisible() {
+
+      updatePlayerPosition({ playerCol, playerRow, myName, myRoom })
+
+
+      // visible world bounds (top-left and bottom-right in world coordinates)
+      const visibleLeft = cameraX;
+      const visibleTop = cameraY;
+      const visibleRight = cameraX + canvas.width / zoom;
+      const visibleBottom = cameraY + canvas.height / zoom;
+
+      const margin = 50 / zoom; // margin adjusted for zoom scale
+
+      const tooFarLeft = playerX < visibleLeft + margin;
+      const tooFarRight = playerX > visibleRight - margin;
+      const tooFarUp = playerY < visibleTop + margin;
+      const tooFarDown = playerY > visibleBottom - margin;
+
+      // NOTE: This is incorrect and not working!
+      if (tooFarLeft || tooFarRight || tooFarUp || tooFarDown) {
+        //console.log("Player is out of view");
+        //navigateView(playerCol, playerRow);
+      }
+
+      // Debug info
+      // console.log(
+      //   Math.floor(playerX),
+      //   Math.floor(playerY),
+      // );
+
+      // console.log(
+      //   Math.floor(cameraX),
+      //   Math.floor(cameraY),
+      // );
+
+      // console.log(
+      //   Math.floor(zoom),
+      // );
+
+      // console.log(
+      //   Math.floor(visibleLeft),
+      //   Math.floor(visibleRight),
+      //   Math.floor(visibleTop),
+      //   Math.floor(visibleBottom),
+      // );
+
+      // console.log(
+      //   Math.floor(canvas.width),
+      //   Math.floor(canvas.height),
+      // );
+
+    }
+
+    let lastDirectionXY = { x: 0, y: 0 }
+
+    function playerStand() {
+
+      if (lastDirectionXY.x == 1) {
+        lastDirectionXY = { x: 0, y: 1 }
+      } else {
+        lastDirectionXY = { x: 1, y: 0 }
+      }
+      // navigateView(playerCol, playerRow);
+
+      keepPlayerVisible();
+    }
+
+    function playerLeft() {
+      playerCol -= 1;
+      // navigateView(playerCol, playerRow);
+      lastDirectionXY = { x: 1, y: 0 }
+      keepPlayerVisible();
+    }
+
+    function playerRight() {
+      playerCol += 1;
+      // navigateView(playerCol, playerRow);
+      lastDirectionXY = { x: 1, y: 0 }
+      keepPlayerVisible();
+    }
+
+    function playerUp() {
+      playerRow -= 1;
+      // navigateView(playerCol, playerRow);
+      lastDirectionXY = { x: 0, y: 1 }
+      keepPlayerVisible();
+    }
+
+    function playerDown() {
+      playerRow += 1;
+      // navigateView(playerCol, playerRow);
+      lastDirectionXY = { x: 0, y: 1 }
+      keepPlayerVisible();
+    }
+
+    function submitAttempt() {
+
+      console.log("proposedTileUse", proposedLetterUse);
+
+      proposedLetterUse = {};
+
+      // console.log(proposedTileMap);
+      proposedTileMap.forEach((i) => {
+        if (i.letter != "_") {
+          console.log(i);
+
+          //----------------------------------------------------------
+          ////////////////////////////////////////////////////////
+          // todo backend logic to accept or deny, etc....
+          ////////////////////////////////////////////////////////
+          const key = tileKey(i.col, i.row);
+          const updated = { col: i.col, row: i.row, ...i, myName, myRoom };
+          socket.emit("proposedTile", updated);
+          ////////////////////////////////////////////////////////
+          //----------------------------------------------------------
+
+          setTile(i.col, i.row, i);
+        }
+      });
+      proposedTileMap = new Map();
+    }
+
+    function playerCenter() {
+      navigateView(playerCol, playerRow);
+    }
+
+    document.getElementById("up").addEventListener("click", () => playerUp());
+    document.getElementById("down").addEventListener("click", () => playerDown());
+    document.getElementById("left").addEventListener("click", () => playerLeft());
+    document.getElementById("right").addEventListener("click", () => playerRight());
+
+    document.getElementById("center").addEventListener("click", () => playerCenter());
+
+    document.getElementById("sendIt").addEventListener("click", (e) => { e.preventDefault(); submitAttempt(); });
+
+    // Scrabble rack buttons
+    for (let i = 1; i <= 8; i++) {
+
+      document.getElementById(`tile${i}`).addEventListener("click", (e) => {
+
+        console.log(`Tile ${i} clicked`);
+
+        // TODO: convert to sockets to set (suggestedTiles array or something like it)
+        let newTile = { ...getTile(playerCol, playerRow) };
+
+        if (newTile.letter == '_') { // only allow proposed tile on a blank tile on the board
+
+          // if (/[a-z]/.test(e.target.innerText)) {
+          //   console.log("includes a lowercase...");
+          //   return;
+          // }
+
+          newTile.letter = e.target.innerText.toUpperCase();
+
+          e.target.innerText = "_";
+
+          proposedLetterUse[i] = (proposedLetterUse[i] || "") + newTile.letter;
+
+          // e.target.innerText = e.target.innerText.toLowerCase();
+
+          setProposedTile(playerCol, playerRow, newTile);
+
+          if (lastDirectionXY.x == 1) {
+            playerRight();
+          }
+
+          if (lastDirectionXY.x == -1) {
+            playerLeft();
+          }
+
+          if (lastDirectionXY.y == 1) {
+            playerDown();
+          }
+          if (lastDirectionXY.y == -1) {
+            playerUp();
+          }
+
+        }
+
+      });
+    }
+
+
+
+    /**
+     * Helper to generate a unique key for a given tile coordinate.
+     */
+    function tileKey(col, row) {
+      return `${col},${row}`;
+    }
+
+    /**
+     * Get a tile object at a specific grid coordinate.
+     * If none exists yet, returns a default tile object.
+     * @param {number} col
+     * @param {number} row
+     * @returns {{col:number, row:number, letter:string, color:string, status:string}}
+     */
+    function getTile(col, row) {
+      const key = tileKey(col, row);
+      if (!tileMap.has(key)) {
+        // Lazy-generate a new tile with defaults
+        const newTile = {
+          col,
+          row,
+          letter: "_",
+          color: 'cyan', // getTileColor(col, row),
+          status: "empty"
+        };
+        tileMap.set(key, newTile);
+      }
+      return tileMap.get(key);
+    }
+
+    function getProposedTile(col, row) {
+      const key = tileKey(col, row);
+      if (!proposedTileMap.has(key)) {
+        // Lazy-generate a new tile with defaults
+        const newTile = {
+          col,
+          row,
+          letter: "_",
+          color: 'cyan', // getTileColor(col, row),
+          status: "empty"
+        };
+        proposedTileMap.set(key, newTile);
+      }
+      return proposedTileMap.get(key);
+    }
+
+    /**
+     * Set or update a tile object in the map.
+     * @param {number} col
+     * @param {number} row
+     * @param {{col:number,row:number,letter:string,color:string,status:string}} tileObj
+     */
+    function setTile(col, row, tileObj) {
+      const key = tileKey(col, row);
+      // Merge given tileObj with col,row and store
+      const updated = { col, row, ...tileObj };
+      tileMap.set(key, updated);
+    }
+
+    function setProposedTile(col, row, tileObj) {
+
+      const key = tileKey(col, row);
+
+      const updated = { col, row, ...tileObj, myName, myRoom };
+
+      //socket.emit("proposedTile", updated);
+
+      proposedTileMap.set(key, updated);
+
+    }
+
+    let player = {};
+    player.col = 1;
+    player.row = 0;
+
+
+    const TILE_SIZE = 64;
+    const TILE_COLS = 8;
+    const TILE_ROWS = 4;
+    const TILE_ORDER = [
+      "ABCDEFGH",
+      "IJKLMNOP",
+      "QRSTUVWX",
+      "YZ_"
+    ];
+
+    // Load the tile sheet
+    const playerImage = new Image();
+    playerImage.src = "/img/player/1.png";
+
+    const tileProoposedImage = new Image();
+    let tttp = "stuv".charAt(Math.floor(Math.random() * 4));
+    let nnnp = Math.floor((Math.random() * 8)) + 1;
+    let thefilep = tttp + "" + nnnp + ".png";// prompt("filename?", ttt + "" + nnn + ".png");//'t1.png';
+    console.log(thefilep);
+    thefilep = '/img/tile/set/1.png';
+    tileProoposedImage.src = thefilep;
+    tileProoposedImage.onload = () => {
+
+    };
+
+    const tileImage = new Image();
+    let ttt = "stuv".charAt(Math.floor(Math.random() * 4));
+    let nnn = Math.floor((Math.random() * 8)) + 1;
+    let thefile = ttt + "" + nnn + ".png";// prompt("filename?", ttt + "" + nnn + ".png");//'t1.png';
+    thefile = '/img/tile/unset/1.png';
+    tileImage.src = thefile;
+    console.log(thefile)
+    tileImage.onload = () => {
+      // setLetters(); // <-- add this line before starting the draw loop
+      navigateView(0, 0);
+      requestAnimationFrame(loop);
+    };
+
+    /**
+     * Draw a single letter tile from the sprite sheet.
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {string} letter - One of A–Z or "_"
+     * @param {number} x - X position on canvas
+     * @param {number} y - Y position on canvas
+     */
+    function drawLetterTile(ctx, letter, x, y, optionOverride) {
+      letter = letter.toUpperCase();
+      let shrink = 0;
+      // Find tile position in grid
+      for (let row = 0; row < TILE_ROWS; row++) {
+        const col = TILE_ORDER[row].indexOf(letter);
+        if (col !== -1) { // this is regarding tile sprite images only
+          const sx = col * TILE_SIZE;
+          const sy = row * TILE_SIZE;
+
+          if (optionOverride) {
+            // tileProoposedImage
+            ctx.drawImage(
+              tileProoposedImage,
+              sx + 1, sy + 1, TILE_SIZE - 2, TILE_SIZE - 2,
+              x + shrink, y + shrink, TILE_SIZE - shrink * 2, TILE_SIZE - shrink * 2
+            );
+            return;
+          } else {
+            ctx.drawImage(
+              tileImage,
+              sx + 1, sy + 1, TILE_SIZE - 2, TILE_SIZE - 2,
+              x + shrink, y + shrink, TILE_SIZE - shrink * 2, TILE_SIZE - shrink * 2
+            );
+            return;
+          }
+        }
+      }
+      console.warn('Letter not found:', letter);
+    }
+
+
+
+
+    const TILE = 64;
+    const canvas = document.getElementById("world");
+    const ctx = canvas.getContext("2d");
+
+    // Resize canvas
+    function resize() {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    // Procedural tile color generator
+    // function getTileColor(x, y) {
+    //   const n = Math.abs(Math.sin(x * 12.9898 + y * 78.233)) * 43758.5453;
+    //   const v = n % 1;
+    //   return v < 0.3 ? "#775533" : v < 0.6 ? "#448844" : "#6666aa";
+    // }
+
+    function getTileItem(x, y) {
+      let col = Math.floor(x / TILE);
+      let row = Math.floor(y / TILE);
+      // console.log({ col, row });
+      return " " + col + " , " + row;
+    }
+
+    function getTileItemWithColRow(col, row) {
+
+      // console.log({ col, row });
+      return " " + col + " , " + row;
+    }
+
+
+    // Camera position and zoom
+    let cameraX = 0;
+    let cameraY = 0;
+    let zoom = .75;
+
+
+
+    // --- Mouse drag handling ---
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let cameraStartX = 0;
+    let cameraStartY = 0;
+
+    function captureCoords(e, option) {
+
+      // Converts a mouse event (clientX, clientY) to world coordinates
+      const worldX = cameraX + e.clientX / zoom;
+      const worldY = cameraY + e.clientY / zoom;
+
+      // Convert world coordinates to tile coordinates
+      const col = Math.floor(worldX / TILE);
+      const row = Math.floor(worldY / TILE);
+
+      // console.log(getTileItemWithColRow(col, row));
+
+      // console.log({ col, row })
+
+      let tt = getTile(col, row);
+
+      if (option) {
+        // tt.isSelected = !tt?.isSelected;
+      }
+
+      setTile(col, row, tt);
+      playerCol = col;
+      playerRow = row;
+      // playerUp();
+      // playerDown();
+      playerStand();
+
+      // console.log(tt);
+    }
+
+    // Track which arrow keys are currently pressed
+    const keysPressed = {};
+
+    // Key down → mark as pressed
+    window.addEventListener("keydown", (e) => {
+
+      console.log(e.key);
+
+      // if (e.key.toUpperCase() == "S") {
+      //   navigateView(playerCol, playerRow);
+      // }
+
+      let tempKey = e?.key?.toUpperCase();
+
+      for (let i = 0; i <= 8; i++) {
+        let isKey = document.getElementById(`tile${i}`);
+        if (isKey?.innerText == tempKey) {
+          isKey.click();
+          break;
+        }
+      }
+
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+        keysPressed[e.key] = true;
+      }
+
+    });
+
+    // Key up → mark as released
+    window.addEventListener("keyup", (e) => {
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+        keysPressed[e.key] = false;
+      }
+    });
+
+    function navigateView(col, row) {
+      // Tile top-left in world coords
+      let tileX = col * TILE;
+      let tileY = row * TILE;
+
+      // Offset so the tile center aligns with canvas center
+      cameraX = tileX - (canvas.width / 2 / zoom) + TILE / 2;
+      cameraY = tileY - (canvas.height / 2 / zoom) + TILE / 2;
+    }
+
+
+    // Update camera per frame
+    function updateCamera() {
+      const baseSpeed = 5; // pixels per frame at zoom = 1
+      const speed = baseSpeed / zoom; // adjust for zoom level
+
+      if (keysPressed["ArrowLeft"]) cameraX -= speed;
+      if (keysPressed["ArrowRight"]) cameraX += speed;
+      if (keysPressed["ArrowUp"]) cameraY -= speed;
+      if (keysPressed["ArrowDown"]) cameraY += speed;
+    }
+
+
+
+
+    canvas.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      cameraStartX = cameraX;
+      cameraStartY = cameraY;
+      captureCoords(e, true)
+      // console.log({ dragStartX, dragStartY });
+    });
+
+    window.addEventListener("mouseup", () => isDragging = false);
+
+    window.addEventListener("mousemove", (e) => {
+
+      if (isDragging) {
+        const dx = (e.clientX - dragStartX) / zoom;
+        const dy = (e.clientY - dragStartY) / zoom;
+        cameraX = cameraStartX - dx;
+        cameraY = cameraStartY - dy;
+        //if (cameraX<-2000) { cameraX=-2000; }
+        //if (cameraX>2000) { cameraX=2000; }
+        //if (cameraY<-2000) { cameraY=-2000; }
+        //if (cameraY>2000) { cameraY=2000; }
+        // console.log({ dx, dy, cameraX, cameraY });
+        // console.log({ x: e.clientX, y: e.clientY });
+
+        // console.log(getTileItem(((e.clientX + cameraX)), ((e.clientY + cameraY))));
+
+        // how to determine row and col of where i'm dragging in relation to TILE, and camera???
+
+        captureCoords(e)
+
+      }
+    });
+
+    // --- Touch handling (drag + pinch zoom) ---
+    let lastTouchDist = null;
+    let touchStartMid = null;
+    let touchCameraStart = null;
+
+    canvas.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        // Single finger drag
+        const t = e.touches[0];
+        captureCoords(t, true);
+        isDragging = true;
+        dragStartX = t.clientX;
+        dragStartY = t.clientY;
+        cameraStartX = cameraX;
+        cameraStartY = cameraY;
+      } else if (e.touches.length === 2) {
+        // Pinch zoom start
+        isDragging = false;
+        const [t1, t2] = e.touches;
+        lastTouchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+        touchStartMid = {
+          x: (t1.clientX + t2.clientX) / 2,
+          y: (t1.clientY + t2.clientY) / 2
+        };
+        console.log({ x, y });
+        touchCameraStart = { x: cameraX, y: cameraY, zoom };
+      }
+    });
+
+    canvas.addEventListener("touchmove", (e) => {
+      if (e.touches.length === 1 && isDragging) {
+        const t = e.touches[0];
+        captureCoords(t, false);
+        const dx = (t.clientX - dragStartX) / zoom;
+        const dy = (t.clientY - dragStartY) / zoom;
+        cameraX = cameraStartX - dx;
+        cameraY = cameraStartY - dy;
+      } else if (e.touches.length === 2) {
+        const [t1, t2] = e.touches;
+        const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+        const mid = {
+          x: (t1.clientX + t2.clientX) / 2,
+          y: (t1.clientY + t2.clientY) / 2
+        };
+
+        // Zoom around midpoint
+        const zoomFactor = dist / lastTouchDist;
+        const newZoom = Math.min(4, Math.max(0.25, touchCameraStart.zoom * zoomFactor));
+        const zoomChange = newZoom / touchCameraStart.zoom;
+
+        cameraX = touchCameraStart.x + (mid.x - touchStartMid.x) / newZoom / zoomChange;
+        cameraY = touchCameraStart.y + (mid.y - touchStartMid.y) / newZoom / zoomChange;
+        zoom = newZoom;
+      }
+    });
+
+    canvas.addEventListener("touchend", () => {
+      if (event.touches.length === 0) {
+        isDragging = false;
+        lastTouchDist = null;
+      }
+    });
+
+    // Optional mouse wheel zoom (desktop)
+    canvas.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+      const newZoom = Math.min(4, Math.max(0.25, zoom * zoomFactor));
+
+      // Zoom around mouse position
+      const mx = e.clientX;
+      const my = e.clientY;
+      cameraX += (mx / zoom - mx / newZoom);
+      cameraY += (my / zoom - my / newZoom);
+      zoom = newZoom;
+    }, { passive: false });
+
+    function randomLetter() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_';
+      return letters[Math.floor(Math.random() * letters.length)];
+    }
+
+    function setLetters() {
+      for (let i = -25; i < 25; i++) {
+        for (let j = -25; j < 25; j++) {
+          setTile(i, j, { letter: '_' });
+          if (Math.random() > .98) {
+            setTile(i, j, { letter: randomLetter() });
+          }
+        }
+      }
+    }
+
+    function draw() {
+
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height); // fill, not clearRect
+
+      //ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.scale(zoom, zoom);
+
+      const startX = Math.floor(cameraX / TILE);
+      const startY = Math.floor(cameraY / TILE);
+      const endX = Math.ceil((cameraX + canvas.width / zoom) / TILE);
+      const endY = Math.ceil((cameraY + canvas.height / zoom) / TILE);
+
+      ctx.font = "14px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "white";
+
+      playerX = playerCol * TILE - cameraX;
+      playerY = playerRow * TILE - cameraY;
+
+      // actual tiles
+      for (let y = startY; y < endY; y++) {
+        for (let x = startX; x < endX; x++) {
+          const px = x * TILE - cameraX;
+          const py = y * TILE - cameraY;
+
+          let theTile = getTile(x, y);
+
+          let colBoundary = 69;
+          let rowBoundary = 69;
+
+          // drawLetterTile(ctx, '_', px, py);
+
+          if (theTile && theTile.letter !== "~" && theTile.col > -colBoundary && theTile.col < colBoundary && theTile.row > -rowBoundary && theTile.row < rowBoundary) { // "_"
+
+            if (theTile?.letter == "_") {
+              drawLetterTile(ctx, theTile.letter, px, py, true);
+            } else {
+              drawLetterTile(ctx, theTile.letter, px, py);
+            }
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "white"
+            if (theTile.isSelected == true) { ctx.strokeRect(px + 6, py + 6, 64 - 12, 64 - 12) }
+          } else {
+            // if (theTile.col > -colBoundary && theTile.col < colBoundary && theTile.row > -rowBoundary && theTile.row < rowBoundary) {
+            //drawLetterTile(ctx, '_', px, py);
+            //}
+          }
+
+          // Draw tile border
+          // ctx.strokeStyle = "red";
+          // ctx.lineWidth = 2;
+          // ctx.strokeRect(px, py, TILE, TILE);
+
+          // Draw col,row centered on tile
+          //      ctx.fillText(`${x},${y}`, px + TILE / 2, py + TILE / 2);
+
+          // if (x == playerCol) {
+          //   playerX = px;
+          // }
+
+          // if (y == playerRow) {
+          //   playerY = py;
+          // }
+
+        }
+      }
+
+
+      // proposed tiles
+      for (let y = startY; y < endY; y++) {
+        for (let x = startX; x < endX; x++) {
+          const px = x * TILE - cameraX;
+          const py = y * TILE - cameraY;
+
+          let theTile = getProposedTile(x, y);
+
+          // console.log(theTile.letter)
+
+          let colBoundary = 69;
+          let rowBoundary = 69;
+
+          // drawLetterTile(ctx, '_', px, py);
+
+          if (theTile && theTile.letter !== "_" && theTile.col > -colBoundary && theTile.col < colBoundary && theTile.row > -rowBoundary && theTile.row < rowBoundary) { // "_"
+            drawLetterTile(ctx, theTile.letter, px, py, true); // override draw to use proposed tile drawing image
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "white"
+            if (theTile.isSelected == true) { ctx.strokeRect(px + 6, py + 6, 64 - 12, 64 - 12) }
+          } else {
+            // if (theTile.col > -colBoundary && theTile.col < colBoundary && theTile.row > -rowBoundary && theTile.row < rowBoundary) {
+            //drawLetterTile(ctx, '_', px, py);
+            //}
+          }
+
+
+
+        }
+      }
+
+
+
+      users.forEach((u) => {
+
+        console.log(u);
+
+        let cplayerX = u.playerCol * TILE - cameraX;
+        let cplayerY = u.playerRow * TILE - cameraY;
+
+        let nickname = u?.nickname || "Unknown";
+
+        ctx.font = "18px Arial";
+
+        // if ((u?.dateTime)) {
+        //   ctx.fillText(u.dateTime, cplayerX - 22, cplayerY - 32);
+        // }
+
+        if (nickname == myName) {
+          ctx.fillStyle = 'black';
+        } else {
+          ctx.fillStyle = 'yellow';
+        }
+
+        if (nickname != myName && (Date.now() - u.dateTime) > 15000) {
+
+        } else {
+          ctx.drawImage(playerImage, cplayerX - 22, cplayerY - 22);
+
+          if ((Date.now() - u.dateTime) < 1000) {
+            ctx.fillText(nickname, cplayerX - 22, cplayerY - 22);
+          }
+
+        }
+
+        if (nickname == myName) {
+
+          if (lastDirectionXY.x > 0) {
+            ctx.font = "32px courier";
+            ctx.fillStyle = 'white';
+            // ctx.fillRect(cplayerX + 25, cplayerY + 1, 15, 15);
+            ctx.fillText("→", cplayerX + 25, cplayerY + 10)
+          }
+
+          if (lastDirectionXY.y > 0) {
+            ctx.font = "32px courier";
+            ctx.fillStyle = 'white';
+            // ctx.fillRect(cplayerX + 1, cplayerY + 25, 15, 15);
+            ctx.fillText("↓", cplayerX + 10, cplayerY + 25)
+          }
+
+        }
+
+        // ctx.drawImage(playerImage, cplayerX - 22, cplayerY - 22);
+        // ctx.fillText(nickname, cplayerX - 22, cplayerY - 22);
+
+      });
+
+      //ctx.drawImage(playerImage, playerX - 22, playerY - 22);
+
+      ctx.restore();
+    }
+
+
+    // --- Animation loop ---
+    function loop() {
+      updateCamera();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+

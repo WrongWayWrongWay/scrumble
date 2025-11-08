@@ -18,6 +18,11 @@ const waves = loadJSONSync('./waves.json');
 const words = loadTXTSync('./words.txt');
 // console.log(words.length);
 
+  
+
+
+
+
 let wordLetterValues = [
   {
     "letter": "A",
@@ -250,6 +255,7 @@ console.log({ "NODE_ENV": NODE_ENV });
 // --- Express setup ---
 const app = express();
 
+
 let server;
 
 // --- Adjust these paths to match your Let's Encrypt certificate files ---
@@ -257,8 +263,8 @@ let privateKey;// = fs.readFileSync("/etc/letsencrypt/live/pasciak.com/privkey.p
 let certificate;// = fs.readFileSync("/etc/letsencrypt/live/pasciak.com/fullchain.pem");
 
 try {
-  privateKey = fs.readFileSync("/etc/letsencrypt/live/pasciak.com/privkey.pem");
-  certificate = fs.readFileSync("/etc/letsencrypt/live/pasciak.com/fullchain.pem");
+  privateKey = fs.readFileSync("privkey.pem");
+  certificate = fs.readFileSync("fullchain.pem");
   // --- Create HTTPS server ---
   server = https.createServer({ key: privateKey, cert: certificate }, app);
 } catch (err) {
@@ -269,6 +275,10 @@ try {
 app.get("/", (req, res) => {
   res.send("Socket.IO HTTPS server is running!");
 });
+
+app.use(express.static(path.join(import.meta.dirname, 'web'))); 
+
+
 
 // --- Create Socket.IO server with CORS enabled for all origins ---
 const io = new Server(server, {
@@ -288,6 +298,7 @@ availableRooms.forEach((r) => {
   maps[r] = new Map();
   createMap(maps[r]);
 })
+
 
 function getUsersInRoom(room) {
   return Array.from(users.values())
@@ -510,6 +521,16 @@ io.on("connection", (socket) => {
   });
 
 });
+
+
+    
+
+
+
+
+
+
+
 
 // --- Start the HTTPS server ---
 const PORT = 4433; // or 3001 if you’re testing locally
