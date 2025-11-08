@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" type="image/png" href="player.png">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <title>Infinite Tile World</title>
+  <link rel="stylesheet" href="style/styles.css">
+
+
+</head>
+
+<body>
+
+  <!-- Keypad -->
+  <div id="keypad">
+    <div id="arrows">
+      <div></div> <!-- empty -->
+      <button class="arrow-btn" id="up">↑</button>
+      <div></div> <!-- empty -->
+      <button class="arrow-btn" id="left">←</button>
+      <div><button class="arrow-btn" id="center">*</button></div> <!-- empty center -->
+      <button class="arrow-btn" id="right">→</button>
+      <div></div> <!-- empty -->
+      <button class="arrow-btn" id="down">↓</button>
+      <div></div> <!-- empty -->
+    </div>
+  </div>
+
+  <!-- Scrabble rack -->
+  <div id="scrabbleRack">
+    <button class="rack-btn" id="tile1"></button>
+    <button class="rack-btn" id="tile2"></button>
+    <button class="rack-btn" id="tile3"></button>
+    <button class="rack-btn" id="tile4"></button>
+    <button class="rack-btn" id="tile5"></button>
+    <button class="rack-btn" id="tile6"></button>
+    <button class="rack-btn" id="tile7"></button>
+    <button class="rack-btn" id="tile8">_</button>
+    <!-- <button class="rack-btn" id="sendIt">></button> -->
+  </div>
+
+  <div id="scrabbleRackb">
+    <!-- <button class="rack-btns" id="tile1b">*</button>
+    <button class="rack-btns" id="tile2b">*</button>
+    <button class="rack-btns" id="tile3b">*</button>
+    <button class="rack-btns" id="tile4b">*</button>
+    <button class="rack-btns" id="tile5b">*</button>
+    <button class="rack-btns" id="tile6b">*</button>
+    <button class="rack-btns" id="tile7b">*</button> -->
+    <button class="rack-btns2" id="sendIt">Submit</button>
+  </div>
+
+  <div id="connectscreen">
+    <p>Connecting...</p>
+  </div>
+
+  <!-- <button onclick="getMap()" id="getMap">Get Map</button> -->
+
+  <div id="debugscreen">
+    <button onclick="joinRoom('room1','sheldon')">Join Room 1 as sheldon</button>
+    <button onclick="joinRoom('room1','john')">Join Room 1 as john</button>
+    <button onclick="joinRoom('room2','sue')">Join Room 2 as sue</button>
+    <button onclick="joinRoom('room2','mary')">Join Room 2 as mary</button>
+    <input id="msg" placeholder="Type message" />
+    <button onclick="sendMessage()">Send</button>
+    <pre id="log"></pre>
+
+  </div>
+
+  <div id="gamescreen">
+    <canvas id="world"></canvas>
+  </div>
+
+
+
+</body>
+</html>

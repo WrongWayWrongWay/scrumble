@@ -1,0 +1,163 @@
+{
+  "DirectlyRelatedToWaves": {
+    "description": "Words that directly describe waves and their physical motion or features.",
+    "words": [
+      "WAVE",
+      "RIPPLE",
+      "SWELL",
+      "SURF",
+      "BREAKER",
+      "CREST",
+      "TROUGH",
+      "TIDE",
+      "CURRENT",
+      "SURGE",
+      "FLOW",
+      "DRIFT",
+      "SPLASH",
+      "SPLASHDOWN",
+      "FOAM",
+      "FROTH",
+      "CURL",
+      "UNDULATE",
+      "OSCILLATE"
+    ]
+  },
+  "OceanWaterImagery": {
+    "description": "Terms related to the sea, ocean environments, and aquatic imagery.",
+    "words": [
+      "SEA",
+      "OCEAN",
+      "BAY",
+      "LAGOON",
+      "SHORE",
+      "COASTLINE",
+      "HORIZON",
+      "ABYSS",
+      "DEEP",
+      "BRINE",
+      "BLUE",
+      "SALT",
+      "CORAL",
+      "REEF",
+      "SHELL",
+      "PEARL",
+      "DRIFTWOOD",
+      "KELP",
+      "WHIRLPOOL",
+      "MAELSTROM"
+    ]
+  },
+  "EnergySoundSignalWaves": {
+    "description": "Words connected to sound, light, radio, and other forms of wave energy.",
+    "words": [
+      "ECHO",
+      "FREQUENCY",
+      "PULSE",
+      "RESONANCE",
+      "VIBRATION",
+      "AMPLITUDE",
+      "WAVELENGTH",
+      "SIGNAL",
+      "TRANSMIT",
+      "RADIATION",
+      "OSCILLATION",
+      "MODULATION",
+      "TONE",
+      "HUM",
+      "STATIC",
+      "INTERFERENCE",
+      "SPECTRUM"
+    ]
+  },
+  "MotionFlowFluidity": {
+    "description": "Words that convey smooth motion, flow, or undulating rhythm.",
+    "words": [
+      "SURGE",
+      "CASCADE",
+      "RIPPLE",
+      "DRIFT",
+      "SWAY",
+      "ROLL",
+      "FLOW",
+      "WASH",
+      "SWEEP",
+      "SLIDE",
+      "UNDULATE",
+      "OSCILLATE",
+      "MEANDER",
+      "GLIDE",
+      "FLUCTUATE"
+    ]
+  },
+  "WeatherNaturalForces": {
+    "description": "Terms describing weather phenomena and natural wave-producing forces.",
+    "words": [
+      "STORM",
+      "GUST",
+      "SWELL",
+      "CURRENT",
+      "TIDE",
+      "MONSOON",
+      "TEMPEST",
+      "CYCLONE",
+      "TSUNAMI",
+      "EBB",
+      "FLOOD"
+    ]
+  },
+  "MetaphoricalWaves": {
+    "description": "Metaphorical or abstract uses of 'waves' — emotion, influence, or movement.",
+    "words": [
+      "EMOTION",
+      "TREND",
+      "MOVEMENT",
+      "SURGE",
+      "SIGNAL",
+      "PHASE",
+      "TRANSMISSION",
+      "MOMENTUM",
+      "FLUCTUATION",
+      "RESONANCE",
+      "ECHO",
+      "VIBE",
+      "FREQUENCY",
+      "PROPAGATION",
+      "RIPPLE"
+    ]
+  },
+  "AdjectivesDescriptors": {
+    "description": "Adjectives and descriptive words tied to the theme of waves and flow.",
+    "words": [
+      "TIDAL",
+      "WAVY",
+      "FLUID",
+      "FLOWING",
+      "RIPPLING",
+      "UNDULATING",
+      "FOAMY",
+      "ROLLING",
+      "RHYTHMIC",
+      "SERENE",
+      "STORMY",
+      "CALM",
+      "DEEP",
+      "ENDLESS"
+    ]
+  },
+  "NamesTitlesConcepts": {
+    "description": "Creative name ideas or thematic titles inspired by the waves theme.",
+    "words": [
+      "TIDAL",
+      "RIPPLE",
+      "FLOW",
+      "SURF",
+      "WAVEFORM",
+      "TIDE",
+      "CREST",
+      "RISING",
+      "DRIFT",
+      "CURRENTS"
+    ]
+  }
+}
