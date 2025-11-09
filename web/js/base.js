@@ -277,13 +277,13 @@
     socket.on("connect", () => {
       log("✅ Connected to server");
 
-      setTimeout(() => {
-        joinRoom(myRoom, myName);
-        setTimeout(() => {
-          getMap();
-          playerStand();
-        }, 500)
-      }, 500)
+      // setTimeout(() => {
+      //   joinRoom(myRoom, myName);
+      //   setTimeout(() => {
+      //     getMap();
+      //     playerStand();
+      //   }, 500)
+      // }, 500)
 
       document.getElementById("gamescreen").style.display = 'block';
       document.getElementById("connectscreen").style.display = 'none';

@@ -18,9 +18,6 @@ const waves = loadJSONSync('./waves.json');
 const words = loadTXTSync('./words.txt');
 // console.log(words.length);
 
-  
-
-
 
 
 let wordLetterValues = [

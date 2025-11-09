@@ -186,6 +186,13 @@ canvas:active {
   display: none;
 }
 
+
+#gamemode {
+  display: none;
+}
+
+
+
 #debugscreen {
   border: 2px solid gray;
   background-color: darkgray;
