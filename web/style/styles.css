@@ -4,6 +4,7 @@ body {
   padding: 0;
   overflow: hidden;
   background: #222;
+  color:#eeeeee;
 }
 
 canvas {
@@ -187,9 +188,24 @@ canvas:active {
 }
 
 
-#gamemode {
+#gamescreen {
   display: none;
 }
+
+#userlist {
+  width:100px;
+  height:200px;
+  background:#ee3333;
+  float:left;
+}
+
+#roomlist {
+  width:100px;
+  height:200px;
+   background:#eeee33;
+   float: left;
+}
+
 
 
 
