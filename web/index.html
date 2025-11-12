@@ -7,87 +7,28 @@
   <link rel="icon" type="image/png" href="/img/player/1.png">
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   
-  <title>Infinite Tile World</title>
+  <title>GAME</title>
   <link rel="stylesheet" href="style/styles.css">
 
 
 </head>
 
 <body>
-  <div id="loginmode">    
+  <div id="loginscreen">    
     <div id="loginbox">
       <div>What should we call you?</div>
-      <input type="text" id="nickname" placeholder="Nickname" />
-      <input type="text" id="room" placeholder="Room" />
-      <button id="loginBtn">Join Game</button>
+      <input type="text" id="nickname" placeholder="Nickname" />          
     </div>  
-
   </div>
 
-    <div id="statsmode">    
-STATSD
-    </div>
+  <div id="titlescreen">    
+TITLESCREEN    
+  </div>
 
-<div id="titlescreen"></div>
-<div id="aboutscreen"></div>
+  <div id="helpscreen">    
+HELPSCREEN    
+  </div>
 
-
-  <div id="gamescreen">    
-    <!-- Keypad -->
-    <div id="keypad">
-      <div id="arrows">
-        <div></div> <!-- empty -->
-        <button class="arrow-btn" id="up">↑</button>
-        <div></div> <!-- empty -->
-        <button class="arrow-btn" id="left">←</button>
-        <div><button class="arrow-btn" id="center">*</button></div> <!-- empty center -->
-        <button class="arrow-btn" id="right">→</button>
-        <div></div> <!-- empty -->
-        <button class="arrow-btn" id="down">↓</button>
-        <div></div> <!-- empty -->
-      </div>
-    </div>
-
-    <!-- Scrabble rack -->
-    <div id="scrabbleRack">
-      <button class="rack-btn" id="tile1"></button>
-      <button class="rack-btn" id="tile2"></button>
-      <button class="rack-btn" id="tile3"></button>
-      <button class="rack-btn" id="tile4"></button>
-      <button class="rack-btn" id="tile5"></button>
-      <button class="rack-btn" id="tile6"></button>
-      <button class="rack-btn" id="tile7"></button>
-      <button class="rack-btn" id="tile8">_</button>
-      <!-- <button class="rack-btn" id="sendIt">></button> -->
-    </div>
-
-    <div id="scrabbleRackb">
-      <!-- <button class="rack-btns" id="tile1b">*</button>
-      <button class="rack-btns" id="tile2b">*</button>
-      <button class="rack-btns" id="tile3b">*</button>
-      <button class="rack-btns" id="tile4b">*</button>
-      <button class="rack-btns" id="tile5b">*</button>
-      <button class="rack-btns" id="tile6b">*</button>
-      <button class="rack-btns" id="tile7b">*</button> -->
-      <button class="rack-btns2" id="sendIt">Submit</button>
-    </div>
-
-    <div id="connectscreen">
-      <p>Connecting...</p>
-    </div>
-
-    <!-- <button onclick="getMap()" id="getMap">Get Map</button> -->
-
-    <div id="debugscreen">
-      <button onclick="joinRoom('room1','sheldon')">Join Room 1 as sheldon</button>
-      <button onclick="joinRoom('room1','john')">Join Room 1 as john</button>
-      <button onclick="joinRoom('room2','sue')">Join Room 2 as sue</button>
-      <button onclick="joinRoom('room2','mary')">Join Room 2 as mary</button>
-      <input id="msg" placeholder="Type message" />
-      <button onclick="sendMessage()">Send</button>
-      <pre id="log"></pre>
-
-    </div>
 
     <div id="gamescreen">
       <canvas id="world"></canvas>

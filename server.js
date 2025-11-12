@@ -16,14 +16,12 @@ import { loadTXTSync } from './loadTXTSync.js';
 
 // const words = loadTXTSync('./words.txt');
 // console.log(words.length);
-const users = new Map();
+
+
+const USERS = new Map();
 
 
 
-
-const NODE_ENV = process.env.NODE_ENV || '';
-
-console.log({ "NODE_ENV": NODE_ENV });
 
 // --- Express setup ---
 const app = express();
@@ -66,33 +64,15 @@ const io = new Server(server, {
 // --- Handle socket connections ---
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
-  users.set(socket.id, { nickname: 'unknown',loginTime: Date.now() });
-  socket.emit('userlist', Array.from(users.values()).map(u => u.nickname));
-  console.log("Client connected:", socket);
-
-
-  socket.on('setnick', (data) => {
-    const user = users.get(socket.id);
+  USERS.set(socket.id, { nickname: 'unknown',loginTime: Date.now() });  
+  socket.on('disconnect', () => {
+    console.log("Client disconnected:", socket.id);
+    const user = USERS.get(socket.id);
     if (user) {
-      user.nickname = data.nickname;
-      user.loginTime = Date.now();
-      users.set(socket.id, user);
-      socket.emit('userlist', users.values().map(u => u.nickname));
+      console.log(`(${socket.id})  start ${user.loginTime} disconnected`);
+      USERS.delete(socket.id);
     }
   });
-
-
-
-// Handle disconnect
-socket.on('disconnect', () => {
-  console.log("Client disconnected:", socket.id);
-  const user = users.get(socket.id);
-  if (user) {
-    console.log(`(${socket.id})  start ${user.loginTime} disconnected`);
-    users.delete(socket.id);
-
-  }
-});
 
 });
 
