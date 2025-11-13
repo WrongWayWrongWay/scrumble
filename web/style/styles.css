@@ -46,10 +46,7 @@ div{ border: 1px solid gray;}
   left: 10%;  
   border: 2px solid #555;
  background-repeat:no-repeat;
-background-position: top center;
-  background-image: url("../img/title.png");
-  background-size: contain;  
-  background-size: 80% 20%;
+  background-position: top center;  
   display: block;  
   width:80%;
   height:80%;
