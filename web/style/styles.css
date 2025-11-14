@@ -1,10 +1,10 @@
 
 :root {
-  --background-color: #340464;
-  --secondary-color: #3a3a3a;
+  --background-color: #fc0101;
+  --secondary-color: #4d4459;
   --border-color: #c7b1da;
-  --box-color: #2e2e2e;
-  --box-other-color: #3334507b;
+  --box-color: #237736;
+  --box-other-color: #0000ff;
   --text-color: #eeeeee;
 } 
 
@@ -14,8 +14,8 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: var(--background-color);
   color: var(--text-color);
+  background-color: var(--background-color) ;
 }
 
 canvas {
@@ -34,8 +34,7 @@ canvas:active {
 
 .box,.box2 {    
   border: 2px solid var(--border-color);
-  padding: 5px;
-  background-color: var(--background-color);
+  padding: 5px;  
   border-radius:15px;   
   background-color:var(--box-color)
 }
@@ -85,12 +84,26 @@ transform: translate(-50%, -50%);
 
 #titlescreen{
   position: absolute;  
-  top: 10%;
-  left: 10%;   
+  left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+  
   display: block;  
-  width:80%;
-  height:80%;
+  width:90%;
+  height:90%;
   z-index: 10;
+  float:left;
+} 
+
+#titlefooter{
+  position:absolute;
+  margin-top:10px;
+  font-size:12px;
+  color:var(--text-color);
+  text-align:bottom;
+  bottom:6px;
+  left:8px;
+  width: 100%;
 } 
 
 #helpscreen {
@@ -105,7 +118,7 @@ transform: translate(-50%, -50%);
 } 
 
 #titlescreen {
-color:red;
+display:block;
 }
 
 #helpscreen {
