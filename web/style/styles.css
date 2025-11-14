@@ -1,8 +1,10 @@
 
 :root {
-  --background-color: #483b61;
+  --background-color: #340464;
   --secondary-color: #3a3a3a;
   --border-color: #c7b1da;
+  --box-color: #2e2e2e;
+  --box-other-color: #3334507b;
   --text-color: #eeeeee;
 } 
 
@@ -30,15 +32,23 @@ canvas:active {
 }
 
 
-.box {    
+.box,.box2 {    
   border: 2px solid var(--border-color);
   padding: 5px;
-  background-color: var(--secondary-color);
+  background-color: var(--background-color);
   border-radius:15px;   
+  background-color:var(--box-color)
 }
 .shadow {
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
 }
+
+
+.box2 {
+  background-color:var(--box-other-color);
+}
+
+
 
 input {
   box-sizing: border-box;
@@ -87,9 +97,9 @@ transform: translate(-50%, -50%);
   position: absolute;
   top: 10%;
   left: 10%;  
-  border: 2px solid #555;
+  border: 2px solid var(--border-color);
   padding: 0px;
-  background-color: #333;
+  background-color: var(--secondary-color);
   display: block;
   z-index:20;
 } 

@@ -1,12 +1,15 @@
+
+
+
 let mode = "production";
 
     switch (mode) {
       case "production":
         try {
-          socket = io("http://127.0.0.1:4433", {
+          socket = io(window.location.href, {
             transports: ["websocket"], // optional: force WebSocket only
           });
-          console.log("production - https://127.0.0.1:4433");
+          console.log("production",window.location.href);
         } catch (e) {
           socket = io("http://127.0.0.1:4433/", {
             transports: ["websocket"], // optional: force WebSocket only
