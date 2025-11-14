@@ -1,10 +1,19 @@
+
+:root {
+  --background-color: #483b61;
+  --secondary-color: #3a3a3a;
+  --border-color: #c7b1da;
+  --text-color: #eeeeee;
+} 
+
+
 html,
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #222;
-  color:#eeeeee;
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
 canvas {
@@ -20,7 +29,26 @@ canvas:active {
   cursor: grabbing;
 }
 
-div{ border: 1px solid gray;}
+
+.box {    
+  border: 2px solid var(--border-color);
+  padding: 5px;
+  background-color: var(--secondary-color);
+  border-radius:15px;   
+}
+.shadow {
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+input {
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  size:10;
+  max-width:100%;
+  border-radius:5px;
+}
+
 
 
 #gamescreen {
@@ -29,24 +57,26 @@ div{ border: 1px solid gray;}
 
 #loginscreen{
   position: absolute;
-  top: 40%;
-  left: 40%;  
-  border: 2px solid #555;
-  padding: 0px;
-  background-color: #333;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+  text-align: center;
+  position: absolute;
+
   display: block;
   z-index:20;
   width: 20%;
   height: 20%;
+
+  float:left;
+  min-height:150px;
+  
 } 
 
 #titlescreen{
   position: absolute;  
   top: 10%;
-  left: 10%;  
-  border: 2px solid #555;
- background-repeat:no-repeat;
-  background-position: top center;  
+  left: 10%;   
   display: block;  
   width:80%;
   height:80%;
@@ -65,7 +95,7 @@ div{ border: 1px solid gray;}
 } 
 
 #titlescreen {
-
+color:red;
 }
 
 #helpscreen {
