@@ -65,6 +65,9 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
   USERS.set(socket.id, { nickname: 'unknown',loginTime: Date.now() });  
+console.log(`(${socket.id})  start ${USERS.get(socket.id).loginTime} connected`);
+
+
   socket.on('disconnect', () => {
     console.log("Client disconnected:", socket.id);
     const user = USERS.get(socket.id);
