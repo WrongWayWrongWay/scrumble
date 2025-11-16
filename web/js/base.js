@@ -3,6 +3,28 @@
 
 let mode = "production";
 
+guid=localStorage.getItem("guid");
+if(!guid){
+  guid="xxxxxxxxyxxxxxyxxxxxyxxxxxyxxxxxy".replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+  localStorage.setItem("guid", guid);
+} 
+
+console.log("GUID:", guid);  
+nickname=localStorage.getItem("nickname");
+if(!nickname){
+  nickname="Player"+Math.floor(Math.random()*1000);
+  localStorage.setItem("nickname",nickname);
+}
+
+
+
+
+
+
+
     switch (mode) {
       case "production":
         try {
@@ -43,7 +65,9 @@ let mode = "production";
 
 
 
-
+function screentoggle(screenid){     
+    document.getElementById(screenid).style.display = document.getElementById(screenid).style.display ==='block'?'none':'block'; 
+}     
 
     
     const canvas = document.getElementById("world");
