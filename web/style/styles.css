@@ -74,7 +74,7 @@ canvas:active {
   border: 2px solid var(--border-color);
   padding: 5px;  
   border-radius:15px;   
-  background-color:var(--box-color)
+  background-color:var(--box-color);
 }
 .shadow {
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
