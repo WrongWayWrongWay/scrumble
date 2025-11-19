@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game UI Base</title>
+    <style>
+        /* --- RESET & GLOBAL STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none; /* Prevents text highlighting like a real game */
+        }
+
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- THE GAME WINDOW --- */
+        #game-container {
+            width: 960px;
+            height: 600px;
+            background: linear-gradient(to bottom, #2b1055, #7597de);
+            position: relative;
+            border: 4px solid #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        /* --- SCREEN SYSTEM --- */
+        /* All screens sit on top of each other. We toggle 'hidden' to switch. */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- UI ELEMENTS --- */
+        h1 {
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        button {
+            background: #ffcc00;
+            border: 2px solid #fff;
+            padding: 10px 30px;
+            margin: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 #000;
+            transition: transform 0.1s;
+        }
+
+        button:hover {
+            transform: translate(-2px, -2px);
+            background: #ffe066;
+        }
+
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        button.secondary {
+            background: #ccc;
+            font-size: 1rem;
+            padding: 8px 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin: 10px;
+            border: 2px solid #000;
+            width: 250px;
+        }
+
+        /* --- SPECIFIC SCREEN STYLES --- */
+
+        /* Title Screen */
+        #title-screen {
+            background: url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(to bottom, #2b1055, #7597de);
+        }
+
+        /* Lobby Screen */
+        .lobby-panel {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%;
+            text-align: center;
+            color: white;
+        }
+
+        .player-list {
+            text-align: left;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            margin: 20px 0;
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        /* Help Screen */
+        .help-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border: 4px solid #000;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Game Screen */
+        #game-screen {
+            justify-content: flex-start; /* Align to top */
+            background-color: #333; /* Placeholder for game world */
+            cursor: crosshair;
+        }
+
+        #hud {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            font-family: monospace;
+        }
+
+        #game-world {
+            flex-grow: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+
+        <!-- 1. TITLE SCREEN -->
+        <div id="title-screen" class="screen">
+            <h1>SUPER GAME</h1>
+            <button onclick="goToScreen('login-screen')">PRESS START</button>
+            <button class="secondary" onclick="alert('Credits: You!')">CREDITS</button>
+        </div>
+
+        <!-- 2. LOGIN SCREEN -->
+        <div id="login-screen" class="screen hidden">
+            <h2>IDENTIFICATION</h2>
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <div>
+                <button onclick="goToScreen('lobby-screen')">LOGIN</button>
+                <button class="secondary" onclick="goToScreen('title-screen')">BACK</button>
+            </div>
+        </div>
+
+        <!-- 3. LOBBY SCREEN -->
+        <div id="lobby-screen" class="screen hidden">
+            <h2>MAIN LOBBY</h2>
+            <div class="lobby-panel">
+                <h3>Online Players</h3>
+                <div class="player-list">
+                    <p>• PlayerOne (Ready)</p>
+                    <p>• Gamer123 (In Match)</p>
+                    <p>• DevTest (Idle)</p>
+                </div>
+                <button onclick="goToScreen('game-screen')">FIND MATCH</button>
+                <button class="secondary" onclick="goToScreen('help-screen')">HOW TO PLAY</button>
+                <button class="secondary" style="background:#ff6b6b;" onclick="goToScreen('title-screen')">LOGOUT</button>
+            </div>
+        </div>
+
+        <!-- 4. HELP SCREEN -->
+        <div id="help-screen" class="screen hidden">
+            <div class="help-content">
+                <h2>HOW TO PLAY</h2>
+                <p>1. Use W,A,S,D to move.</p>
+                <p>2. Press SPACE to jump.</p>
+                <p>3. Collect the coins to win.</p>
+                <br>
+                <button onclick="goToScreen('lobby-screen')">BACK TO LOBBY</button>
+            </div>
+        </div>
+
+        <!-- 5. GAME SCREEN -->
+        <div id="game-screen" class="screen hidden">
+            <div id="hud">
+                <span>SCORE: 0050</span>
+                <span>HP: 100%</span>
+            </div>
+            <div id="game-world">
+                <h2>[ GAMEPLAY HAPPENS HERE ]</h2>
+            </div>
+            <!-- Pause overlay could go here -->
+            <button style="position: absolute; bottom: 20px; right: 20px;" class="secondary" onclick="goToScreen('lobby-screen')">QUIT</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Simple Navigation System
+        function goToScreen(screenId) {
+            // 1. Hide all screens
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.add('hidden');
+            });
+
+            // 2. Show the target screen
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+        }
+    </script>
+
+</body>
+</html>

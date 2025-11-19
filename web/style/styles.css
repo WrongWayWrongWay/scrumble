@@ -1,8 +1,15 @@
 :root {
+<<<<<<< HEAD
   --c1-base: #ff0000;
   --c1-dark: #880000;
   --c1-light: #ff7777;
   --c1-text: #ffffff;
+=======
+  --background-color1:#ff0000;
+  --text-color1:#ffffff;
+  --highlight-color1:#ff7777;
+  --dark-color1:#884444;
+>>>>>>> 69aec6b (stuff)
 
   --c2-base: #00ff00;
   --c2-dark: #008800;
@@ -24,7 +31,11 @@
 
   --font-base: "Story Script", sans-serif;
   --font-title: "Momo Signature", cursive;
+<<<<<<< HEAD
   --font-mono: 'Geist Mono', monospace;
+=======
+  --font-mono:  'Geist Mono', monospace;
+>>>>>>> 69aec6b (stuff)
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Momo+Signature&family=Story+Script&display=swap');
@@ -48,10 +59,16 @@ table {
   border-collapse: collapse;
   width: 100%;
   border-radius: 5px;
+<<<<<<< HEAD
   height: 60%;
   border: 2px solid var(--c4-base);
   background-color: var(--secondary-color);
   font-size: 3vh;
+=======
+  border: 2px solid var(--border-color);
+  background-color: var(--secondary-color);
+  font-size:3vh;
+>>>>>>> 69aec6b (stuff)
 }
 
 td,
@@ -69,13 +86,22 @@ tr:hover {
 }
 
 th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
   background-color: #04AA6D;
   color: white;
 }
 
+thead {
+  top:0;
+  display: block;
+  position:sticky;
+}
+
+tbody {
+  display: block;
+  overflow-y:scroll;
+  height:200px;
+  max-height: 300px;
+}
 
 canvas {
   display: block;
@@ -91,12 +117,20 @@ canvas:active {
 }
 
 
+<<<<<<< HEAD
 .box,
 .box2 {
   border: 2px solid var(--border-color);
   padding: 5px;
   border-radius: 15px;
   background-color: var(--box-color);
+=======
+.box,.box2 {
+  border: 2px solid var(--border-color);
+  padding: 5px;
+  border-radius:15px;
+  background-color:var(--box-color);
+>>>>>>> 69aec6b (stuff)
 }
 
 .shadow {
@@ -160,9 +194,15 @@ input {
   text-align: center;
   position: absolute;
   display: block;
+<<<<<<< HEAD
   z-index: 20;
   float: left;
   min-height: 150px;
+=======
+  z-index:20;
+  float:left;
+  min-height:150px;
+>>>>>>> 69aec6b (stuff)
   display: none;
   font-size: 3vh;
   background-color: var(--c2-base);
@@ -187,6 +227,7 @@ input {
 }
 
 
+<<<<<<< HEAD
 #titlescreen {
   position: absolute;
   left: 50%;
@@ -213,6 +254,35 @@ input {
   width: 98%;
   height: 15px;
   overflow: hidden;
+=======
+#titlescreen{
+  position: absolute;
+  left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+
+  display: block;
+  width:90%;
+  height:90%;
+  z-index: 10;
+  float:left;
+  overflow: hidden;
+    display: none;
+               background: url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(to bottom, #2b1055, #7597de);
+}
+
+#titlefooter{
+  position:absolute;
+  margin-top:10px;
+  font-size:12px;
+  color:var(--text-color);
+  text-align:bottom;
+  vertical-align: bottom;
+  bottom:6px;
+  width: 98%;
+  height:15px;
+  overflow: hidden;
+>>>>>>> 69aec6b (stuff)
   font-family: var(--font-mono);
   font-weight: 800;
   font-style: normal;
@@ -229,7 +299,10 @@ input {
   width: 34%;
   text-align: center;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 69aec6b (stuff)
 .right {
   float: right;
   width: 33%;
@@ -237,12 +310,16 @@ input {
 }
 
 #helpscreen {
+<<<<<<< HEAD
   font-family: var(--font-mono);
+=======
+>>>>>>> 69aec6b (stuff)
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   display: block;
+<<<<<<< HEAD
   width: 90%;
   height: 90%;
   z-index: 100;
@@ -250,3 +327,13 @@ input {
   overflow: hidden;
   display: none;
 }
+=======
+  width:90%;
+  height:90%;
+  z-index: 100;
+  float:left;
+  overflow: hidden;
+    display: none;
+}
+
+>>>>>>> 69aec6b (stuff)
