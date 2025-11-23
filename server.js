@@ -26,6 +26,10 @@ const USERS = new Map();
 // --- Express setup ---
 const app = express();
 
+app.get("/backgrounds.css", (req, res) => {
+  res.send("Socket.IO HTTPS server is running!");
+});
+
 
 let server;
 
@@ -64,7 +68,7 @@ const io = new Server(server, {
 // --- Handle socket connections ---
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
-  USERS.set(socket.id, { nickname: 'unknown',loginTime: Date.now() });  
+  USERS.set(socket.id, { nickname: 'unknown',loginTime: Date.now() });
 console.log(`(${socket.id})  start ${USERS.get(socket.id).loginTime} connected`);
 
 
@@ -78,7 +82,7 @@ console.log(`(${socket.id})  start ${USERS.get(socket.id).loginTime} connected`)
   });
 
 
-  
+
 
 });
 
