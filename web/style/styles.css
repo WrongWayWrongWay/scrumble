@@ -253,11 +253,9 @@ background-image: var(--background-pat-ad);
   float: left;
   height: 150px;
   display: none;
-  font-size: 3vh;
   background-color: var(--c6-dark);
   background-image: var(--background-pat-w);
   overflow-y: scroll;
-
 }
 
 #debugscreen {
