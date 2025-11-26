@@ -128,7 +128,7 @@ border-right: 1px solid var(--c4-light);
 
 
 td{
-  border: 1px solid var(--c4-light)
+  border: 1px solid var(--c4-light);
   padding: 8px;
 }
 
