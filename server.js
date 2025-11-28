@@ -72,6 +72,21 @@ io.on("connection", (socket) => {
 console.log(`(${socket.id})  start ${USERS.get(socket.id).loginTime} connected`);
 
 
+
+socket.on("set_nickname", (nickname) => {
+  const user = USERS.get(socket.id);
+  if (user) {
+    user.nickname = nickname;
+    console.log(`(${socket.id})  nickname set to ${nickname}`);
+  } else {
+    console.log(`(${socket.id})  set_nickname failed: user not found`);
+  }
+  socket.emit('nickname_set_ack', { success: true });
+}
+);
+
+
+
   socket.on('disconnect', () => {
     console.log("Client disconnected:", socket.id);
     const user = USERS.get(socket.id);

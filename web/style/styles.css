@@ -236,7 +236,6 @@ input {
   height: 20%;
   float: left;
   min-height: 150px;
-  display: none;
 background-color: var(--c4-dark);
 background-image: var(--background-pat-ad);
 }
@@ -288,7 +287,6 @@ background-image: var(--background-pat-ad);
   z-index: 10;
   float: left;
   overflow: hidden;
-  display: none;
   background-color: var(--c2-dark);
   background-image: var(--background-pat-t);
 }

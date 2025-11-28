@@ -54,12 +54,29 @@ socket.on("connect", () => {
   //document.getElementById("connectscreen").style.display = 'none';
 });
 
+socket.on("nickname_set_ack", (data) => {
+  if (data.success) {
+    console.log("✅ Nickname set successfully");
+    localStorage.setItem("nickname", nickname);
+    fadeOut(document.getElementById("loginscreen"));
+  } else {
+    console.log("❌ Failed to set nickname");
+  }
+});
+
 
 socket.on("disconnect", () => {
   console.log("❌ Disconnected");
 });
 
-
+document.getElementById("nickinput").onsubmit = function (e) {
+  e.preventDefault();
+  nickname = document.getElementById("nickinputfield").value;
+  nickname = nickname.replace(/[^a-zA-Z0-9_]/g, '').substring(0, 20);
+  document.getElementById("nickinputfield").value = nickname;
+  console.log("Setting nickname to:", nickname);
+  socket.emit("set_nickname", nickname);
+}
 
 function fadeOut(el) {
   el.style.opacity = 1;
@@ -95,7 +112,7 @@ function screentoggle(screenid) {
    fadeOut(document.getElementById(screenid));
   } else {
     fadeIn(document.getElementById(screenid));
-  }     
+  }
 }
 
 
