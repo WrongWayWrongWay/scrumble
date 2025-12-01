@@ -19,7 +19,9 @@ import { loadTXTSync } from './loadTXTSync.js';
 
 
 const USERS = new Map();
+const ROOMS = new Map();
 
+ROOMS.set("1", { name: "Lobby", maxPlayers: 100, players: [] });
 
 
 
@@ -68,22 +70,30 @@ const io = new Server(server, {
 // --- Handle socket connections ---
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
-  USERS.set(socket.id, { nickname: 'unknown',loginTime: Date.now() });
-console.log(`(${socket.id})  start ${USERS.get(socket.id).loginTime} connected`);
+
+  socket.on("list_rooms", () => {
+    socket.emit("rooms_list", ROOMS);
+  });
 
 
+  socket.on("set_nickname", (nickname) => {
+    //if nickanme in use
+    nickname = nickname.trim().substring(0, 20); // limit length to 20 chars
+    nickname = nickname.replace(/[^a-zA-Z0-9_]/g, ''); // allow only alphanumeric and underscores
+    if (nickname.length === 0) {
+      socket.emit("nickname_set_ack", { success: false, message: "Invalid nickname. Please choose a different one." });
+      console.log("❌ Invalid nickname:", nickname);
+      return;
+    }
+    if ([...USERS.values()].some(user => user.nickname === nickname)) {
+      socket.emit("nickname_set_ack", { success: false, message: "Nickname already in use. Please choose another one." });
+      console.log("❌ Nickname already in use:", nickname);
+      return;
+    }
 
-socket.on("set_nickname", (nickname) => {
-  const user = USERS.get(socket.id);
-  if (user) {
-    user.nickname = nickname;
-    console.log(`(${socket.id})  nickname set to ${nickname}`);
-  } else {
-    console.log(`(${socket.id})  set_nickname failed: user not found`);
-  }
-  socket.emit('nickname_set_ack', { success: true });
-}
-);
+    USERS.set(socket.id, { nickname: nickname, loginTime: new Date().toISOString() });
+    socket.emit("nickname_set_ack", { success: true });
+  });
 
 
 
