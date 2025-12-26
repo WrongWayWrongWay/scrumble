@@ -21,7 +21,7 @@ import { loadTXTSync } from './loadTXTSync.js';
 const USERS = new Map();
 const ROOMS = new Map();
 
-ROOMS.set("1", { name: "Lobby", maxPlayers: 100, players: [] });
+ROOMS.set("1", { id: 1 , name: "TEST", maxPlayers: 100, players: [] });
 
 
 

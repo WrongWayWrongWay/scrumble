@@ -54,12 +54,36 @@ socket.on("connect", () => {
   //document.getElementById("connectscreen").style.display = 'none';
 });
 
+socket.on("rooms_list", (data) => {
+  console.log("Rooms list received:", data);
+  fadeIn(document.getElementById("lobbyscreen"));
+  const table = document.getElementById("roomlisttable");
+  // Clear existing rows except header
+  while (table.rows.length > 1) {
+    table.deleteRow(1);
+  }
+  data.forEach((room) => {
+    const row = table.insertRow();
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    cell1.textContent = room.id;
+    cell2.textContent = room.name;
+  });
+});
+
+
+
+
+
 socket.on("nickname_set_ack", (data) => {
   if (data.success) {
     console.log("✅ Nickname set successfully");
     localStorage.setItem("nickname", nickname);
+    document.getElementById("loginerror").textContent = "";
     fadeOut(document.getElementById("loginscreen"));
+    socket.emit("list_rooms");
   } else {
+    document.getElementById("loginerror").textContent = "Failed to set nickname. Please try a different one.";
     console.log("❌ Failed to set nickname");
   }
 });
